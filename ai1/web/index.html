@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="description" content="An interactive educational QuickSort visualizer.">
+  <title>QuickSortVisualizer - Interactive Algorithm Visualizer</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="#top" aria-label="QuickSortVisualizer home">
+  <span class="brand-mark" aria-hidden="true">↯</span>
+  <span class="brand-name">QuickSort<span>Visualizer</span></span>
+  <span class="version-badge">Interactive<br>v2.4</span>
+      </a>
+      <nav class="top-nav" aria-label="Page navigation">
+        <button class="icon-button" id="theme-toggle" type="button" title="Toggle theme" aria-label="Toggle theme">☾</button>
+        <a href="#how-it-works">How it works</a>
+        <a href="#complexity">Complexity</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top" class="workspace">
+    <section class="hero">
+      <h1>Understand Quick Sort, <span>One Step at a Time.</span></h1>
+      <p>An interactive educational visualizer designed for computer science students and developers to master partitioning, pivot selection, and recursive sorting.</p>
+  </section>
+
+  <section class="top-grid">
+      <article class="card data-card">
+        <div class="card-title-row">
+          <h2><span class="title-icon">⌁</span>Your data</h2>
+          <span id="data-status-badge" class="status-badge ready">Ready</span>
+        </div>
+        <p class="card-copy">Enter comma-separated numbers or generate a random dataset to begin simulation.</p>
+        <form id="sort-form" novalidate>
+          <label for="array-input">Numbers array</label>
+          <input id="array-input" type="text" value="8, 3, -2, 5, 5, 1, 9, 4" autocomplete="off" aria-describedby="input-error">
+          <p id="input-error" class="input-error" role="alert"></p>
+          <div class="two-controls">
+            <div>
+              <label for="algorithm-select">Sorting algorithm</label>
+              <select id="algorithm-select">
+                <option value="quicksort">QuickSort (Lomuto)</option>
+                <option value="mergesort">MergeSort</option>
+                <option value="heapsort">HeapSort</option>
+                <option value="builtin">JavaScript built-in sort</option>
+              </select>
+            </div>
+            <div>
+              <label for="array-size-range">Array size</label>
+              <div class="range-row"><input id="array-size-range" type="range" min="5" max="20" value="8"><output id="array-size-val">8</output></div>
+            </div>
+          </div>
+          <div class="data-actions">
+            <button id="btn-random" class="small-button" type="button">⟳ &nbsp;Randomize</button>
+            <button id="btn-clear" class="clear-button" type="button">Clear</button>
+          </div>
+          <button id="btn-sort" class="primary-button" type="submit">◎ &nbsp; Sort numbers</button>
+        </form>
+      </article>
+
+      <div class="result-stack">
+        <article class="card result-card">
+          <div class="card-title-row"><h2><span class="title-icon muted-icon">▱</span>Original input</h2><span id="original-count" class="count-label">8 elements</span></div>
+          <div id="original-array-display" class="array-display"></div>
+        </article>
+        <article class="card result-card">
+          <div class="card-title-row"><h2><span class="title-icon green-icon">◉</span>Sorted result</h2><span id="sorted-status-badge" class="count-label">Not sorted yet</span></div>
+          <div id="sorted-array-display" class="array-display empty-result">Your sorted numbers will appear here upon completion...</div>
+        </article>
+      </div>
+  </section>
+
+  <section class="middle-grid">
+      <div class="visual-column">
+        <article class="card visual-card">
+          <div class="visual-heading">
+            <div><h2><span class="title-icon">▥</span>Algorithm Visualization</h2><p>Real-time graphic representation of array partitions and pointer movements.</p></div>
+            <span id="step-counter" class="step-badge">Step 0 / 0</span>
+          </div>
+          <div id="visualization-canvas" class="visualization-canvas">
+            <div id="canvas-placeholder" class="canvas-placeholder"><span class="play-orb">◎</span><strong>Ready to Visualize</strong><span>Click “Sort numbers” above to start step-by-step QuickSort execution.</span></div>
+            <div id="bars-container" class="bars-container" aria-label="Array visualization"></div>
+          </div>
+          <div class="legend"><span><i class="dot pivot"></i>Pivot</span><span><i class="dot comparing"></i>Comparing</span><span><i class="dot swapping"></i>Swapping</span><span><i class="dot sorted"></i>Sorted</span><span><i class="dot active"></i>Active Range</span></div>
+        </article>
+        <div class="lower-grid">
+          <article class="card control-card">
+            <h3><span class="title-icon">☷</span>Control Panel</h3>
+            <div class="control-buttons"><button id="btn-play" class="control-button play" type="button">◉ &nbsp;Play</button><button id="btn-pause" class="control-button" type="button" disabled>Ⅱ &nbsp;Pause</button><button id="btn-back" class="control-button" type="button" disabled>Back</button><button id="btn-next" class="control-button" type="button" disabled>Next</button><button id="btn-reset" class="control-button" type="button">Reset</button></div>
+            <label for="speed-range">Animation speed</label><input id="speed-range" type="range" min="100" max="1000" step="50" value="500"><div class="speed-labels"><span>Fast</span><span>Normal</span><span>Slow</span></div>
+          </article>
+          <article class="card operation-card">
+            <h3><span class="title-icon">ⓘ</span>Current Operation</h3>
+            <div id="current-operation-box" class="operation-box">Ready to run QuickSort. Click “Sort numbers” or “Play” to observe partitioning and comparisons.</div>
+            <div class="operation-meta"><span>Status: <strong id="status-text">Ready</strong></span><span>Algorithm: <strong id="algorithm-status">QuickSort</strong></span></div>
+          </article>
+        </div>
+      </div>
+      <article class="card source-card">
+        <div class="card-title-row"><h2><span class="title-icon">&lt;/&gt;</span>Source Code</h2><div class="source-actions"><select id="code-lang-select"><option value="js">JavaScript</option><option value="python">Python</option></select><button id="btn-copy-code" class="copy-button" type="button" title="Copy code">▣</button></div></div>
+        <pre id="code-container" class="code-container" tabindex="0"></pre>
+      </article>
+    </section>
+    <section id="how-it-works" class="bottom-grid">
+      <article class="card explanation-card"><h2><span class="title-icon">▥</span>How Quick Sort Works</h2><div class="explanation-grid"><div><strong>01. Choose a Pivot</strong><p>Select an element from the array to serve as the pivot point (often the last element).</p></div><div><strong>02. Partition</strong><p>Rearrange elements so smaller items go to the left and larger items go to the right of the pivot.</p></div><div><strong>03. Place Pivot</strong><p>Put the pivot element into its final sorted position in the array.</p></div><div><strong>04. Recursion</strong><p>Recursively apply the above steps to the sub-arrays on the left and right of the pivot.</p></div></div></article>
+  <article id="complexity" class="card complexity-card"><h2><span class="title-icon">▥</span>Complexity &amp; Characteristics</h2><div class="complexity-list"><div><span>Best Case Time</span><strong class="good">O(n log n)</strong></div><div><span>Average Case Time</span><strong>O(n log n)</strong></div><div><span>Worst Case Time</span><strong class="bad">O(n²) (Poor pivot choice)</strong></div><div><span>Space Complexity</span><strong>O(log n) auxiliary</strong></div></div></article>
+    </section>
+  </main>
+
+  <footer class="site-footer"><span>© 2025 QuickSortVisualizer. Built for Computer Science Education.</span><span><i class="dot sorted"></i> In-place algorithm &nbsp; · &nbsp; Unstable sorting</span></footer>
+  </body>
+  </html>
+<!DOCTYPE html>
